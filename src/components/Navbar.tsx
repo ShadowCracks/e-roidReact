@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import './style.css'; // Ensure your CSS is correctly linked
+import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar: React.FC<{ text: string; secondaryText?: string }> = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const openMobileNavbar = () => setMobileNavOpen(true);
-  const closeMobileNavbar = () => setMobileNavOpen(false);
+  const toggleMobileNav = () => {
+    setMobileNavOpen(!isMobileNavOpen);  // Toggle instead of separate open/close
+  };
 
   return (
     <div className="header-container">
@@ -34,7 +35,8 @@ const Navbar: React.FC<{ text: string; secondaryText?: string }> = () => {
             </a>
             <a href="#" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
           </div>
-          <span className="hamburger" role="button" tabIndex={0} onClick={openMobileNavbar}>
+          {/* Changed onClick to use toggleMobileNav */}
+          <span className="hamburger" role="button" tabIndex={0} onClick={toggleMobileNav}>
             <img src="/images/icon-hamburger.svg" alt="Hamburger Icon" />
           </span>
         </div>
@@ -44,7 +46,8 @@ const Navbar: React.FC<{ text: string; secondaryText?: string }> = () => {
           <div className="mobile-header bg-bg1">
             <div className="header-wrapper mx-auto">
               <div className="close-nav d-flex align-items-center justify-content-end h-100">
-                <img role="button" tabIndex={0} src="/images/icon-close.svg" alt="Close Icon" onClick={closeMobileNavbar} />
+                {/* Changed onClick to use toggleMobileNav */}
+                <img role="button" tabIndex={0} src="/images/icon-close.svg" alt="Close Icon" onClick={toggleMobileNav} />
               </div>
               <div className="flex flex-column align-items-center gap-5 mt-5">
                 <nav className="d-flex flex-column align-items-center gap-5">
