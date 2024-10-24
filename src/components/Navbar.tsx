@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Navbar: React.FC<{ text: string; secondaryText?: string }> = () => {
+// Either make the props optional with ?
+interface NavbarProps {
+  text?: string;
+  secondaryText?: string;
+}
+
+// Use the interface and make text optional
+const Navbar: React.FC<NavbarProps> = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   const toggleMobileNav = () => {
-    setMobileNavOpen(!isMobileNavOpen);  // Toggle instead of separate open/close
+    setMobileNavOpen(!isMobileNavOpen);
   };
 
   return (
@@ -35,7 +42,6 @@ const Navbar: React.FC<{ text: string; secondaryText?: string }> = () => {
             </a>
             <a href="#" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
           </div>
-          {/* Changed onClick to use toggleMobileNav */}
           <span className="hamburger" role="button" tabIndex={0} onClick={toggleMobileNav}>
             <img src="/images/icon-hamburger.svg" alt="Hamburger Icon" />
           </span>
@@ -46,7 +52,6 @@ const Navbar: React.FC<{ text: string; secondaryText?: string }> = () => {
           <div className="mobile-header bg-bg1">
             <div className="header-wrapper mx-auto">
               <div className="close-nav d-flex align-items-center justify-content-end h-100">
-                {/* Changed onClick to use toggleMobileNav */}
                 <img role="button" tabIndex={0} src="/images/icon-close.svg" alt="Close Icon" onClick={toggleMobileNav} />
               </div>
               <div className="flex flex-column align-items-center gap-5 mt-5">
