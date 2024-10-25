@@ -25,7 +25,7 @@ const NewContentSection: React.FC = () => {
                 </span>
                 <div className="d-flex align-items-center justify-content-between gap-1">
                   <span className="p-2 px-2 rounded-xl bg-green d-flex align-items-center">
-                    <img src="images/icon-tick.svg" alt="tick icon" />
+                    <img src="/images/icon-tick.svg" alt="tick icon" />
                   </span>
                   <span className="p-1 px-2 rounded-xl bg-primary-800 fs-10 fw-bold">9/10</span>
                 </div>
@@ -36,21 +36,21 @@ const NewContentSection: React.FC = () => {
       </div>
 
       <div className="info-col">
-        <img src="images/home-img1.png" alt="Aside" />
+        <img src="/images/home-img1.png" alt="Aside" />
       </div>
 
       <div className="info-col-gallery">
         <section className="workout-images d-flex flex-wrap">
-          <img src="images/home-workout-img1.png" alt="Workout 1" />
-          <img src="images/home-workout-img2.png" alt="Workout 2" />
-          <img src="images/home-workout-img3.png" alt="Workout 3" />
-          <img src="images/home-workout-img4.png" alt="Workout 4" />
-          <img src="images/home-workout-img5.png" alt="Workout 5" />
-          <img src="images/home-workout-img6.png" alt="Workout 6" />
-          <img src="images/home-workout-img7.png" alt="Workout 7" />
-          <img src="images/home-workout-img8.png" alt="Workout 8" />
-          <img src="images/home-workout-img9.png" alt="Workout 9" />
-          <img src="images/home-workout-img6.png" alt="Workout 6 Duplicate" />
+          <img src="/images/home-workout-img1.png" alt="Workout 1" />
+          <img src="/images/home-workout-img2.png" alt="Workout 2" />
+          <img src="/images/home-workout-img3.png" alt="Workout 3" />
+          <img src="/images/home-workout-img4.png" alt="Workout 4" />
+          <img src="/images/home-workout-img5.png" alt="Workout 5" />
+          <img src="/images/home-workout-img6.png" alt="Workout 6" />
+          <img src="/images/home-workout-img7.png" alt="Workout 7" />
+          <img src="/images/home-workout-img8.png" alt="Workout 8" />
+          <img src="/images/home-workout-img9.png" alt="Workout 9" />
+          <img src="/images/home-workout-img6.png" alt="Workout 6 Duplicate" />
         </section>
       </div>
     </section>

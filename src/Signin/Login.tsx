@@ -7,7 +7,7 @@ const Login: React.FC = () => {
     <main className="auth-container d-flex">
       <div className="left d-flex align-items-end justify-content-center pb-5">
         <a href="#" className="mb-5">
-          <img src="images/icon-home-yellowbg.svg" alt="Home" />
+          <img src="/images/icon-home-yellowbg.svg" alt="Home" />
         </a>
       </div>
       <div className="right mx-auto d-flex flex-column align-items-start justify-content-center">
@@ -17,11 +17,11 @@ const Login: React.FC = () => {
         </div>
         <form action="#" className="w-100 px-12 d-flex flex-column gap-3 mt-3">
           <label className="input-item w-100" htmlFor="email">
-            <img src="images/icon-mail.svg" alt="Email Icon" />
+            <img src="/images/icon-mail.svg" alt="Email Icon" />
             <input className="mx-2" type="email" placeholder="Email" id="email" />
           </label>
           <label className="input-item input-password w-100 d-flex" htmlFor="password">
-            <img src="images/icon-lock.svg" alt="Lock Icon" />
+            <img src="/images/icon-lock.svg" alt="Lock Icon" />
             <input
               className="mx-2 w-100"
               type="password"
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
               id="password"
             />
             <span role="button" tabIndex={0} className="eye">
-              <img src="images/icon-eye-off.svg" alt="Toggle Visibility" />
+              <img src="/images/icon-eye-off.svg" alt="Toggle Visibility" />
             </span>
           </label>
           <div className="d-flex justify-content-between align-items-center">
@@ -52,11 +52,11 @@ const Login: React.FC = () => {
         </div>
         <div className="mt-4 w-100 d-flex gap-3">
           <a href="#" className="btn-outline w-50">
-            <img src="images/icon-google.svg" alt="Google Icon" />
+            <img src="/images/icon-google.svg" alt="Google Icon" />
             <span className="fw-semibold">Google</span>
           </a>
           <a href="#" className="btn-outline w-50">
-            <img src="images/icon-fb.svg" alt="Facebook Icon" />
+            <img src="/images/icon-fb.svg" alt="Facebook Icon" />
             <span className="fw-semibold">Facebook</span>
           </a>
         </div>

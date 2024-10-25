@@ -4,7 +4,7 @@ import React from 'react';
 
 const SourceDashboard: React.FC = () => {
   const products = Array(10).fill({
-    imgSrc: 'images/osgear.png',
+    imgSrc: '/images/osgear.png',
     rating: 1,
     site: 'steroidify.com',
     score: 95.82,

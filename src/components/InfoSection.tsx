@@ -85,7 +85,7 @@ const InfoSection: React.FC = () => {
                 </span>
                 <div className="d-flex align-items-center justify-content-between gap-1">
                   <span className="p-2 px-2 rounded-xl bg-green d-flex align-items-center">
-                    <img src="images/icon-tick.svg" alt="tick icon" />
+                    <img src="/images/icon-tick.svg" alt="tick icon" />
                   </span>
                   <span className="p-1 px-2 rounded-xl bg-primary-800 fs-10 fw-bold">9/10</span>
                 </div>
@@ -96,7 +96,7 @@ const InfoSection: React.FC = () => {
       </div>
 
       <div className="info-col">
-        <img src="images/aside-img.png" alt="Aside" />
+        <img src="/images/aside-img.png" alt="Aside" />
       </div>
     </section>
   );
