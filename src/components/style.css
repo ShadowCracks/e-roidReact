@@ -171,18 +171,18 @@ a {
 }
 .auth-container .left {
   width: 56%;
-  background: url("./images/sign-in-img.png") no-repeat center center/cover;
+  background: url("/images/sign-in-img.png") no-repeat center center/cover;
 }
 .forgot-password .left {
-  background: url("./images/reset-password-img.png") no-repeat center
+  background: url("/images/reset-password-img.png") no-repeat center
     center/cover !important;
 }
 .reset-password .left {
-  background: url("./images/reset-password-img2.png") no-repeat center
+  background: url("/images/reset-password-img2.png") no-repeat center
     center/cover !important;
 }
 .create-account .left {
-  background: url("./images/create-account-img.png") no-repeat center
+  background: url("/images/create-account-img.png") no-repeat center
     center/cover !important;
 }
 .auth-container .right {
