@@ -6,6 +6,7 @@ import SignUp from './Signin/SignUp';
 import './index.css'
 import './components/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Username from './components/User/Username';
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />      {/* Homepage route */}
         <Route path="/login" element={<Login />} /> {/* Login page route */}
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/username" element={<Username />} />
       </Routes>
     </Router>
   );
