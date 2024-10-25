@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './style.css';
+import '../components/style.css';
 import React from 'react';
 
 const Login: React.FC = () => {
