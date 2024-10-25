@@ -1,4 +1,3 @@
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css'; // Your custom styles
 import React from 'react';
@@ -9,11 +8,6 @@ const SourceDashboard: React.FC = () => {
     rating: 1,
     site: 'steroidify.com',
     score: 95.82,
-  });
-
-  const comments = Array(4).fill({
-    text: 'Forum topic >> "Blackout"',
-    tag: '25.50',
   });
 
   return (
