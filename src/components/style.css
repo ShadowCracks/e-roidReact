@@ -788,7 +788,7 @@ header nav {
 
 .custom-dropdown::after {
   content: "";
-  background-image: url("images/icon-chevron-down.svg"); /* Replace with the path to your image */
+  background-image: url("/images/icon-chevron-down.svg"); /* Replace with the path to your image */
   background-size: contain; /* Adjust as needed */
   background-repeat: no-repeat;
   width: 20px; /* Adjust the width of the image */
@@ -1232,10 +1232,10 @@ header nav {
   color: white;
 }
 #home section {
-  background: url("images/home-header-bg.png") no-repeat center center/cover;
+  background: url("/images/home-header-bg.png") no-repeat center center/cover;
 }
 .tab-options {
-  background: url("images/texture-bg2.png") no-repeat center center/cover;
+  background: url("/images/texture-bg2.png") no-repeat center center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1309,7 +1309,7 @@ header nav {
   border-radius: 60px;
 }
 .infos-container {
-  background: url("images/texture-bg2.png") no-repeat center center/cover;
+  background: url("/images/texture-bg2.png") no-repeat center center/cover;
   padding: 1rem;
   flex-wrap: wrap;
 }
