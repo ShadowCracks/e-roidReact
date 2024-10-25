@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Homepage/Homepage'; // Import the Home component
 import Login from './Signin/Login';
 import SignUp from './Signin/SignUp';
+import './index.css'
 
 const App: React.FC = () => {
   return (
