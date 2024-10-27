@@ -1,12 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TabContents from './TabContents';
 import ProfileSettings from './ProfileSettings';
+import supabase from '../../../utils/supabase';
 
-const ProfileDashboard = () => {
-  // State to track the selected tab
+const ProfileDashboard = ({ profileOwnerId }: { profileOwnerId: string }) => {
   const [activeTab, setActiveTab] = useState('Overview');
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+
+  useEffect(() => {
+    const checkIfOwnProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      // Logging user IDs to verify data
+      console.log("Authenticated User ID:", user?.id);
+      console.log("Profile Owner ID:", profileOwnerId);
+
+      if (user?.id === profileOwnerId) {
+        setIsOwnProfile(true);
+      }
+    };
+
+    checkIfOwnProfile();
+  }, [profileOwnerId]);
 
   return (
     <div className="main-container">
@@ -20,13 +37,15 @@ const ProfileDashboard = () => {
           >
             Overview
           </a>
-          <a 
-            href="#"
-            className={`tab-trigger fs-6 py-1-5 ${activeTab === 'Settings' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Settings')}
-          >
-            Settings
-          </a>
+          {isOwnProfile && (
+            <a 
+              href="#"
+              className={`tab-trigger fs-6 py-1-5 ${activeTab === 'Settings' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Settings')}
+            >
+              Settings
+            </a>
+          )}
         </div>
       </div>
       <div className="main-wrapper mx-auto mt-3">
@@ -60,7 +79,7 @@ const ProfileDashboard = () => {
           </section>
 
           {/* Conditionally render TabContents or ProfileSettings */}
-          {activeTab === 'Overview' ? <TabContents /> : <ProfileSettings />}
+          {activeTab === 'Overview' ? <TabContents /> : isOwnProfile && <ProfileSettings />}
           
         </div>
       </div>
@@ -69,3 +88,4 @@ const ProfileDashboard = () => {
 };
 
 export default ProfileDashboard;
+

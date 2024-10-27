@@ -1,5 +1,4 @@
 import InfoSection from '../InfoSection'
-import Navbar from '../Navbar'
 import NewContentSection from '../NewContentSection'
 import SourceDashboard from '../SourceDashboard'
 
@@ -11,7 +10,6 @@ function Homepage() {
   
   <>
       <div>
-      <Navbar />
       <SourceDashboard />
       <InfoSection />
       <NewContentSection />

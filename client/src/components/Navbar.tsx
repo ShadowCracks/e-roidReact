@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import supabase from '../../utils/supabase'; // Adjust the import path as necessary
 
 interface NavbarProps {
   text?: string;
@@ -9,11 +10,46 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
 
   // Single toggle function instead of separate open/close
   const toggleMobileNav = () => {
     console.log('Toggle clicked, current state:', isMobileNavOpen); // For debugging
     setMobileNavOpen(!isMobileNavOpen);
+  };
+
+  // Check user authentication status
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+  
+      if (session) {
+        // Fetch the username if the user is logged in
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', session.user?.id)
+          .single();
+          
+        if (error) {
+          console.error('Error fetching username:', error);
+        } else {
+          setUsername(data?.username ?? null);
+        }
+      }
+    };
+  
+    checkSession();
+  }, []);
+
+  // Log out function
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsLoggedIn(false);
+    setUsername(null);
+    window.location.href = '/'; // Redirect to homepage after logout
   };
 
   return (
@@ -37,12 +73,30 @@ const Navbar: React.FC<NavbarProps> = () => {
             <a style={{ borderRadius: '5px', border: '1px solid var(--primary-800)', padding: '6px 8px' }} href="#">
               <img src="/images/icon-FavoriteFilled.svg" alt="Favorite Icon" />
             </a>
-            <a style={{ backgroundColor: 'var(--primary-800)', width: '102px' }} href="#" className="fw-semibold fs-7 navbar-btn">
-              Sign up
-            </a>
-            <a href="#" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
+            {!isLoggedIn ? (
+              <>
+                <a style={{ backgroundColor: 'var(--primary-800)', width: '102px' }} href="signup" className="fw-semibold fs-7 navbar-btn">
+                  Sign up
+                </a>
+                <a href="login" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
+              </>
+            ) : (
+              <>
+                {username && (
+                  <a href={`/profile/${username}`} className="bg-white fw-semibold fs-7 navbar-btn">
+                    Profile
+                  </a>
+                )}
+                <button 
+                  onClick={handleLogout} 
+                  className="bg-white fw-semibold fs-7 navbar-btn"
+                  style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                >
+                  Logout
+                </button>
+              </>
+            )}
           </div>
-          {/* Changed to use toggleMobileNav */}
           <button 
             className="hamburger" 
             onClick={toggleMobileNav} 
@@ -52,12 +106,10 @@ const Navbar: React.FC<NavbarProps> = () => {
           </button>
         </div>
 
-        {/* Mobile Header - Using && for conditional rendering */}
         {isMobileNavOpen && (
           <div className="mobile-header bg-bg1">
             <div className="header-wrapper mx-auto">
               <div className="close-nav d-flex align-items-center justify-content-end h-100">
-                {/* Changed to use toggleMobileNav */}
                 <button 
                   onClick={toggleMobileNav} 
                   style={{ background: 'none', border: 'none', padding: 0 }}
@@ -80,10 +132,29 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <a style={{ borderRadius: '5px', border: '1px solid var(--primary-800)', padding: '6px 8px' }} href="#">
                   <img src="/images/icon-FavoriteFilled.svg" alt="Favorite Icon" />
                 </a>
-                <a style={{ backgroundColor: 'var(--primary-800)', width: '102px' }} href="#" className="fw-semibold fs-7 navbar-btn">
-                  Sign up
-                </a>
-                <a href="#" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
+                {!isLoggedIn ? (
+                  <>
+                    <a style={{ backgroundColor: 'var(--primary-800)', width: '102px' }} href="signup" className="fw-semibold fs-7 navbar-btn">
+                      Sign up
+                    </a>
+                    <a href="login" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
+                  </>
+                ) : (
+                  <>
+                    {username && (
+                      <a href={`/profile/${username}`} className="bg-white fw-semibold fs-7 navbar-btn">
+                        Profile
+                      </a>
+                    )}
+                    <button 
+                      onClick={handleLogout} 
+                      className="bg-white fw-semibold fs-7 navbar-btn"
+                      style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
