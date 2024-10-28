@@ -1,39 +1,37 @@
-// AuthProvider.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import supabase from '../utils/supabase'; // Import your Supabase client
+import { Session, User } from '@supabase/supabase-js';
+import supabase from '../utils/supabase'; // Adjust the path as necessary
 
 interface AuthContextType {
-  user: any;
-  setUser: (user: any) => void;
+  user: User | null;
+  session: Session | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    // Check user session on initial load
-    const getUser = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data?.session?.user || null);
-    };
-
-    getUser();
-
-    // Listen for changes in auth state
     const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user || null);
+      setUser(session?.user ?? null);
+      setSession(session);
     });
 
-    // Unsubscribe the listener on cleanup
+    // Check if there's an existing session
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+      setSession(data.session);
+    });
+
     return () => {
       authListener.subscription.unsubscribe();
     };
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, session }}>
       {children}
     </AuthContext.Provider>
   );
@@ -46,4 +44,3 @@ export const useAuth = () => {
   }
   return context;
 };
-

@@ -22,25 +22,28 @@ const Navbar: React.FC<NavbarProps> = () => {
   // Check user authentication status
   useEffect(() => {
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsLoggedIn(!!session);
-  
-      if (session) {
+      const { data } = await supabase.auth.getSession();
+
+      if (data.session) {
+        setIsLoggedIn(true);
+
         // Fetch the username if the user is logged in
-        const { data, error } = await supabase
+        const { data: userData, error } = await supabase
           .from('profiles')
           .select('username')
-          .eq('id', session.user?.id)
+          .eq('id', data.session.user?.id)
           .single();
-          
+
         if (error) {
           console.error('Error fetching username:', error);
         } else {
-          setUsername(data?.username ?? null);
+          setUsername(userData?.username ?? null);
         }
+      } else {
+        setIsLoggedIn(false);
       }
     };
-  
+
     checkSession();
   }, []);
 
@@ -89,8 +92,13 @@ const Navbar: React.FC<NavbarProps> = () => {
                 )}
                 <button 
                   onClick={handleLogout} 
-                  className="bg-white fw-semibold fs-7 navbar-btn"
-                  style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                  className="fw-semibold fs-7"  // Remove `navbar-btn` class to avoid potential conflicts
+                  style={{
+                    color: 'red',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
                 >
                   Logout
                 </button>
@@ -146,13 +154,13 @@ const Navbar: React.FC<NavbarProps> = () => {
                         Profile
                       </a>
                     )}
-                    <button 
-                      onClick={handleLogout} 
-                      className="bg-white fw-semibold fs-7 navbar-btn"
-                      style={{ border: 'none', background: 'none', cursor: 'pointer' }}
-                    >
-                      Logout
-                    </button>
+                  <button 
+                    onClick={handleLogout} 
+                    className="bg-red fw-semibold fs-7 navbar-btn"
+                    style={{ border: 'none', background: 'none', color: 'red', cursor: 'pointer' }}
+                  >
+                    Logout
+                  </button>
                   </>
                 )}
               </div>
