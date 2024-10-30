@@ -73,15 +73,15 @@ const Navbar: React.FC<NavbarProps> = () => {
             </form>
           </div>
           <div className="flex gap-3 nav-btns">
-            <a style={{ borderRadius: '5px', border: '1px solid var(--primary-800)', padding: '6px 8px' }} href="#">
-              <img src="/images/icon-FavoriteFilled.svg" alt="Favorite Icon" />
+            <a style={{ borderRadius: '5px', border: '1px solid var(--primary-800)', padding: '6px 8px' }} href="/">
+              <img src="/images/icon-FavoriteFilled(1).png" alt="Favorite Icon" />
             </a>
             {!isLoggedIn ? (
               <>
-                <a style={{ backgroundColor: 'var(--primary-800)', width: '102px' }} href="signup" className="fw-semibold fs-7 navbar-btn">
+                <a style={{ backgroundColor: 'var(--primary-800)', width: '102px' }} href="/signup" className="fw-semibold fs-7 navbar-btn">
                   Sign up
                 </a>
-                <a href="login" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
+                <a href="/login" className="bg-white fw-semibold fs-7 navbar-btn">Login</a>
               </>
             ) : (
               <>
