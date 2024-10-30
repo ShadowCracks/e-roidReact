@@ -21,7 +21,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />         {/* Login page route */}
         <Route path="/signup" element={<SignUp />} />       {/* Signup page route */}
         <Route path="/profile/:username" element={<Username />} /> {/* Dynamic user profile route */}
-        <Route path="/Source" element={<Source />} />
+        <Route path="/source" element={<Source />} />
       </Routes>
     </Router>
     </AuthProvider>
