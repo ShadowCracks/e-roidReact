@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SourceTalk from './SourceTalk';
 import SourceReview from './SourceReview';
 
 const Source: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'review' | 'talk'>('review');
+
   useEffect(() => {
     // Call any onLoad functions here in useEffect
     generateHeader('Source');
@@ -37,17 +40,24 @@ const Source: React.FC = () => {
       </div>
       <div className="main-wrapper mx-auto mt-3">
         <div className="main-section mt-3 d-flex">
-            
           <div>
             <div className="d-flex gap-2">
-              <a href="source-review.html" className="rounded-sm-btn fs-7 fw-bold bg-black text-white">
+              <button
+                onClick={() => setActiveTab('review')}
+                className={`rounded-sm-btn fs-7 fw-bold ${activeTab === 'review' ? 'bg-black text-white' : ''}`}
+              >
                 Reviews
-              </a>
-              <a href="source-talk.html" className="rounded-sm-btn fs-7 fw-bold">
+              </button>
+              <button
+                onClick={() => setActiveTab('talk')}
+                className={`rounded-sm-btn fs-7 fw-bold ${activeTab === 'talk' ? 'bg-black text-white' : ''}`}
+              >
                 Talk
-              </a>
+              </button>
             </div>
-            <SourceReview />
+            <div className="content-section mt-3">
+              {activeTab === 'review' ? <SourceReview /> : <SourceTalk />}
+            </div>
           </div>
         </div>
       </div>

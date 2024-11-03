@@ -61,7 +61,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         <div className="main-wrapper header-wrapper mx-auto d-flex align-items-center justify-content-between">
           <div className="navbar flex align-items-center gap-4">
             <nav className="d-flex align-items-center gap-5">
-              <a href="#" className="text-white fw-medium">Sources</a>
+              <a href="/source" className="text-white fw-medium">Sources</a>
               <a href="#" className="text-white fw-medium">Steroids</a>
               <a href="#" className="text-white fw-medium">Community</a>
             </nav>
