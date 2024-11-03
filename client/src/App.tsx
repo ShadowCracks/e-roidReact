@@ -10,6 +10,7 @@ import Username from './components/User/Username';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './AuthProvider';
 import Source from './components/Source/Source';
+import SourceReviewInside from './components/Source/SourceReviewInside';
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
         <Route path="/signup" element={<SignUp />} />       {/* Signup page route */}
         <Route path="/profile/:username" element={<Username />} /> {/* Dynamic user profile route */}
         <Route path="/source" element={<Source />} />
+        <Route path="/source/:source_name" element={<SourceReviewInside />} />
       </Routes>
     </Router>
     </AuthProvider>
