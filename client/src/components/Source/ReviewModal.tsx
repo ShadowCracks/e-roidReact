@@ -50,7 +50,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit }) 
                     onClick={() => setRating(star)}
                   >
                     <img 
-                      src={`images/icon-review-star${star <= (hoveredStar || rating) ? '' : '-empty'}.svg`}
+                      src={`/images/icon-review-star${star <= (hoveredStar || rating) ? '' : '-empty'}.svg`}
                       alt={`Star ${star}`}
                       className="star-icon"
                       style={{ width: '24px', height: '24px', cursor: 'pointer' }}

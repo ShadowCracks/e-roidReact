@@ -99,7 +99,7 @@ const SourceReview: React.FC = () => {
           </div>
 
           <div className="list-pagination mt-3 d-flex gap-2 align-items-center justify-content-center">
-            <img className="cursor-pointer" src="images/icon-chevron-left.svg" alt="" />
+            <img className="cursor-pointer" src="/images/icon-chevron-left.svg" alt="" />
             <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center active">1</span>
             <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">2</span>
             <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">3</span>
