@@ -10,15 +10,14 @@ import Reviewcom from './Comments/Reviewcom';
 
 const SourceReviewInside: React.FC = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [sourcereview, setSource] = useState<{ source_name: string } | null>(null);
+  const [sourcereview, setSource] = useState<{ source_id: string; source_name: string } | null>(null);
   const { source_name } = useParams<{ source_name: string }>(); // Extract source_name from the URL
   
-
   useEffect(() => {
     const fetchSource = async () => {
       const { data, error } = await supabase
         .from('sourcereview')
-        .select('source_name')
+        .select('source_id, source_name')
         .eq('source_name', source_name) // Use source_name for fetching
         .single();
 
@@ -34,10 +33,6 @@ const SourceReviewInside: React.FC = () => {
       fetchSource();
     }
   }, [source_name]);
-  const handleReviewSubmit = (reviewData: any) => {
-    console.log("Review submitted:", reviewData);
-    // Add logic to handle the review submission
-  };
 
   return (
     <div className="main-container">
@@ -57,7 +52,7 @@ const SourceReviewInside: React.FC = () => {
                 </div>
                 <div className="item-detail_content">
                   <h5 className="fs-6 m-0">
-                  {sourcereview?.source_name || 'Loading...'}
+                    {sourcereview?.source_name || 'Loading...'}
                   </h5>
                   <div className="review-stars d-flex flex-row">
                     <img src="/images/icon-review-star-empty.svg" alt="" />
@@ -135,8 +130,6 @@ const SourceReviewInside: React.FC = () => {
             </section>
 
             <Reviewcom setIsReviewModalOpen={setIsReviewModalOpen} />
-
-
           </div>
 
           <aside className="d-flex flex-column gap-3">
@@ -149,19 +142,16 @@ const SourceReviewInside: React.FC = () => {
 
             <RecentReviews />
             <NewSubmissions />    
-
-           
           </aside>
         </div>
       </div>
-
-      
       
       <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
-        onSubmit={handleReviewSubmit}
+        source_id={sourcereview?.source_id || ''} // Fallback to empty string if undefined
       />
+
     </div>
   );
 };
