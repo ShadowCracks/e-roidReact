@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import supabase from '../../../../utils/supabase';
 
 interface ReviewSectionProps {
   setIsReviewModalOpen: (isOpen: boolean) => void;
@@ -12,7 +13,49 @@ interface ReviewItemProps {
   comment: string;
 }
 
+// Updated interface to handle nullable profiles
+interface SupabaseReviewResponse {
+  comment: string;
+  profiles: {
+    username: string;
+  } | null;  // Make profiles nullable
+}
+
 const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen }) => {
+  const [reviews, setReviews] = useState<ReviewItemProps[]>([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('comment, profiles (username)');
+     
+        if (error) {
+          console.error('Error fetching reviews:', error.message);
+          return;
+        }
+        
+        if (data) {
+          const formattedReviews = (data as unknown as SupabaseReviewResponse[]).map(review => ({
+            userName: review.profiles?.username || 'Anonymous', // Add null check and fallback
+            karmaPoints: 0,
+            likeCount: 0,
+            dislikeCount: 0,
+            comment: review.comment,
+          }));
+          console.log('Fetched data:', data);
+
+          setReviews(formattedReviews);
+        }
+      } catch (err) {
+        console.error('Error processing reviews:', err);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
   return (
     <section className="review bg-bg8 rounded-xl p-3">
       <div className="review-head d-flex align-items-center justify-content-between">
@@ -26,16 +69,16 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen }) => {
       </div>
 
       <div className="review-list d-flex flex-column gap-3 mt-2 pt-2">
-        {/* Sample reviews, replace with dynamic data if needed */}
-        <ReviewItem 
-          userName="User"
-          karmaPoints={922}
-          likeCount={12223}
-          dislikeCount={322}
-          comment="600mg a week makes me hungry and vascular as ever, is good for tendons so good with deca in an off season. Watch out for your rbc, especially if you run high doses of boldenone; then it's not mild anymore. Just run a mild or low dose and you get some benefits without any or low side effects."
-        />
-
-        {/* Pagination */}
+        {reviews.map((review, index) => (
+          <ReviewItem 
+            key={index}
+            userName={review.userName}
+            karmaPoints={review.karmaPoints}
+            likeCount={review.likeCount}
+            dislikeCount={review.dislikeCount}
+            comment={review.comment}
+          />
+        ))}
         <Pagination />
       </div>
     </section>
@@ -51,21 +94,9 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ userName, karmaPoints, likeCoun
         <div>
           <h6 className="m-0 fw-bold">{userName}</h6>
           <span title="Comment Karma Point" className="comment-karma_point bg-bg10 d-flex align-items-center">
-            <div className="review-stars d-flex flex-row">
-              <img src="/images/icon-review-star-empty.svg" alt="Star" />
-              <img src="/images/icon-review-star.svg" alt="Star" />
-              <img src="/images/icon-review-star.svg" alt="Star" />
-              <img src="/images/icon-review-star.svg" alt="Star" />
-              <img src="/images/icon-review-star.svg" alt="Star" />
-            </div>
-            <img src="/images/icon-karma.svg" alt="Karma Icon" />
             <span className="karma-amount">{karmaPoints}</span>
           </span>
         </div>
-      </div>
-      <div className="tags d-flex align-items-center gap-2">
-        <span className="tag-status">new</span>
-        <span className="tag-posted">10d ago</span>
       </div>
     </div>
     <p className="fs-9 m-0 mt-1">{comment}</p>
