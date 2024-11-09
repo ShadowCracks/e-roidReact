@@ -17,14 +17,7 @@ interface ReviewItemProps {
  onReactionChange: () => void;
 }
 
-interface ReviewData {
- review_id: string;
- comment: string;
- profiles: {
-   username: string;
- };
- source_id: string;
-}
+
 
 const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceId }) => {
  const [reviews, setReviews] = useState<ReviewItemProps[]>([]);
