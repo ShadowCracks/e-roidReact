@@ -129,7 +129,10 @@ const SourceReviewInside: React.FC = () => {
               <img src="/images/workout-img2.png" alt="" />
             </section>
 
-            <Reviewcom setIsReviewModalOpen={setIsReviewModalOpen} />
+            <Reviewcom 
+  setIsReviewModalOpen={setIsReviewModalOpen} 
+  sourceId={sourcereview?.source_id || ''}
+/>
           </div>
 
           <aside className="d-flex flex-column gap-3">
