@@ -15,9 +15,31 @@ interface ReviewItemProps {
  comment: string;
  userReaction?: 'like' | 'dislike' | null;
  onReactionChange: () => void;
+ overall_rating: number;
+ product_effectiveness: number;
+ customer_service: number;
+ shipping_and_delivery: number;
+ price_to_performance: number;
 }
 
-
+// Star Rating Component
+const StarRating: React.FC<{ rating: number; title: string }> = ({ rating, title }) => {
+ return (
+   <div className="flex flex-col gap-1">
+     <span className="text-sm text-gray-600">{title}</span>
+     <div className="flex gap-1">
+       {[1, 2, 3, 4, 5].map((star) => (
+         <img
+           key={star}
+           src={`/images/icon-review-star${star <= rating ? '' : '-empty'}.svg`}
+           alt={`Star ${star}`}
+           className="w-4 h-4"
+         />
+       ))}
+     </div>
+   </div>
+ );
+};
 
 const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceId }) => {
  const [reviews, setReviews] = useState<ReviewItemProps[]>([]);
@@ -40,7 +62,12 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
          review_id,
          comment,
          profiles (username),
-         source_id
+         source_id,
+         overall_rating,
+         product_effectiveness,
+         customer_service,
+         shipping_and_delivery,
+         price_to_performance
        `)
        .eq('source_id', sourceId);
 
@@ -72,7 +99,17 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
        }
      }
 
-     const formattedReviews = (data as unknown as { review_id: string; comment: string; profiles: { username: string }; source_id: string }[]).map(review => {
+     const formattedReviews = (data as unknown as { 
+       review_id: string; 
+       comment: string; 
+       profiles: { username: string }; 
+       source_id: string;
+       overall_rating: number;
+       product_effectiveness: number;
+       customer_service: number;
+       shipping_and_delivery: number;
+       price_to_performance: number;
+     }[]).map(review => {
        const reviewReactions = reactionCounts?.filter(r => r.review_id === review.review_id) || [];
        const likes = reviewReactions.filter(r => r.reaction_type === 'like').length;
        const dislikes = reviewReactions.filter(r => r.reaction_type === 'dislike').length;
@@ -85,7 +122,12 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
          dislikeCount: dislikes,
          comment: review.comment,
          userReaction: userReactions[review.review_id],
-         onReactionChange: fetchReviews
+         onReactionChange: fetchReviews,
+         overall_rating: review.overall_rating || 0,
+         product_effectiveness: review.product_effectiveness || 0,
+         customer_service: review.customer_service || 0,
+         shipping_and_delivery: review.shipping_and_delivery || 0,
+         price_to_performance: review.price_to_performance || 0
        };
      });
 
@@ -122,14 +164,7 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
          reviews.map((review, index) => (
            <ReviewItem 
              key={index}
-             reviewId={review.reviewId}
-             userName={review.userName}
-             karmaPoints={review.karmaPoints}
-             likeCount={review.likeCount}
-             dislikeCount={review.dislikeCount}
-             comment={review.comment}
-             userReaction={review.userReaction}
-             onReactionChange={review.onReactionChange}
+             {...review}
            />
          ))
        ) : (
@@ -149,7 +184,12 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
  dislikeCount, 
  comment,
  userReaction,
- onReactionChange
+ onReactionChange,
+ overall_rating,
+ product_effectiveness,
+ customer_service,
+ shipping_and_delivery,
+ price_to_performance
 }) => {
  const handleReaction = async (type: 'like' | 'dislike') => {
    try {
@@ -160,7 +200,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
      }
 
      if (userReaction === type) {
-       // Remove reaction if clicking the same button
        const { error } = await supabase
          .from('review_reactions')
          .delete()
@@ -171,7 +210,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
 
        if (error) throw error;
      } else {
-       // If there's an existing reaction, delete it first
        if (userReaction) {
          await supabase
            .from('review_reactions')
@@ -182,7 +220,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
            });
        }
 
-       // Insert new reaction
        const { error } = await supabase
          .from('review_reactions')
          .insert({
@@ -213,6 +250,15 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
          </div>
        </div>
      </div>
+
+     <div className="bg-bg7 rounded-lg p-3 mb-3 grid grid-cols-2 md:grid-cols-3 gap-3">
+       <StarRating title="Overall Rating" rating={overall_rating} />
+       <StarRating title="Product Effectiveness" rating={product_effectiveness} />
+       <StarRating title="Customer Service" rating={customer_service} />
+       <StarRating title="Shipping & Delivery" rating={shipping_and_delivery} />
+       <StarRating title="Price to Performance" rating={price_to_performance} />
+     </div>
+
      <p className="fs-9 m-0 mt-1">{comment}</p>
      <div className="comment-footer d-flex align-items-center justify-content-between mt-2">
        <div className="like-dislike d-flex align-items-center gap-3">
