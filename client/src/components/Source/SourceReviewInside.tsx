@@ -16,6 +16,9 @@ interface SourceReview {
   delivery: number;
   service: number;
   pricing: number;
+  review_count: number;
+  average_rating: number;
+  rank?: number;
 }
 
 const SourceReviewInside: React.FC = () => {
@@ -25,6 +28,13 @@ const SourceReviewInside: React.FC = () => {
   
   useEffect(() => {
     const fetchSource = async () => {
+      // First get all sources ordered by average_rating to calculate rank
+      const { data: allSources } = await supabase
+        .from('sourcereview')
+        .select('source_id, average_rating')
+        .order('average_rating', { ascending: false });
+
+      // Then get the specific source details
       const { data, error } = await supabase
         .from('sourcereview')
         .select(`
@@ -34,16 +44,22 @@ const SourceReviewInside: React.FC = () => {
           quality,
           delivery,
           service,
-          pricing
+          pricing,
+          review_count,
+          average_rating
         `)
         .eq('source_name', source_name)
         .single();
 
       if (error) {
         console.error("Error fetching source:", error);
-      } else {
-        console.log("Fetched source data:", data);
-        setSource(data);
+      } else if (data && allSources) {
+        // Calculate rank
+        const rank = allSources.findIndex(s => s.source_id === data.source_id) + 1;
+        const sourceWithRank = { ...data, rank };
+        
+        console.log("Fetched source data:", sourceWithRank);
+        setSource(sourceWithRank);
       }
     };
 
@@ -89,28 +105,28 @@ const SourceReviewInside: React.FC = () => {
                       <div className="item-detail_table-body">
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
                           <span className="fs-10 fw-semibold text-uppercase">OVERALL</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.review_count || 0}</span>
                           <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.overall || 0}%</span>
-                          <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
                           <span className="fs-10 fw-semibold text-uppercase">QUALITY</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.review_count || 0}</span>
                           <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.quality || 0}%</span>
-                          <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
                           <span className="fs-10 fw-semibold text-uppercase">DELIVERY</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.review_count || 0}</span>
                           <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.delivery || 0}%</span>
-                          <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
                           <span className="fs-10 fw-semibold text-uppercase">SERVICE</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.review_count || 0}</span>
                           <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.service || 0}%</span>
-                          <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
                           <span className="fs-10 fw-semibold text-uppercase">PRICING</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.review_count || 0}</span>
                           <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.pricing || 0}%</span>
-                          <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                       </div>
                     </div>
@@ -122,26 +138,20 @@ const SourceReviewInside: React.FC = () => {
                 <div className="item-detail_stats d-flex align-items-end gap-1 flex-wrap">
                   <div className="item-detail_stats-item rounded-lg bg-primary-800 d-flex flex-column align-items-center justify-content-center">
                     <div>
-                      <span>1</span>
+                      <span>{sourcereview?.rank || '-'}</span>
                       <span>Rank</span>
                     </div>
                   </div>
                   <div className="item-detail_stats-item rounded-lg bg-primary-800 d-flex flex-column align-items-center justify-content-center">
                     <div>
-                      <span>71.7</span>
+                      <span>{sourcereview?.average_rating?.toFixed(1) || 0}</span>
                       <span>Score</span>
                     </div>
                   </div>
                   <div className="item-detail_stats-item rounded-lg bg-primary-800 d-flex flex-column align-items-center justify-content-center">
                     <div>
-                      <span>5</span>
+                      <span>{sourcereview?.review_count || 0}</span>
                       <span>Votes</span>
-                    </div>
-                  </div>
-                  <div className="item-detail_stats-item rounded-lg bg-primary-800 d-flex flex-column align-items-center justify-content-center">
-                    <div>
-                      <span>1</span>
-                      <span>Rank</span>
                     </div>
                   </div>
                 </div>

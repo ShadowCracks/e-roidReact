@@ -20,7 +20,7 @@ interface Ratings {
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  source_id: string; // Passing the source_id here for review association
+  source_id: string;
 }
 
 const StarRating: FC<StarRatingProps> = ({ rating, hoveredStar, onHover, onRate, label }) => (
@@ -61,11 +61,10 @@ const ReviewModal: FC<ReviewModalProps> = ({ isOpen, onClose, source_id }) => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // Fetch the session and user information
     const fetchUser = async () => {
       const { data: { session }} = await supabase.auth.getSession();
       if (session && session.user) {
-        setUser(session.user);  // Store user info
+        setUser(session.user);
       }
     };
     fetchUser();
@@ -73,29 +72,50 @@ const ReviewModal: FC<ReviewModalProps> = ({ isOpen, onClose, source_id }) => {
 
   if (!isOpen) return null;
 
+  // Show login message if user is not authenticated
+  if (!user) {
+    return (
+      <div className="modal-overlay position-fixed top-0 start-0 w-100 h-100 bg-black bg-opacity-50 d-flex align-items-center justify-content-center" style={{ zIndex: 1000 }}>
+        <div className="modal-content bg-bg3 rounded-xl p-4" style={{ maxWidth: '500px', width: '90%' }}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4 className="fw-bold m-0">Write a Review</h4>
+            <button onClick={onClose} className="btn-close bg-white rounded-circle" aria-label="Close" />
+          </div>
+          
+          <div className="text-center py-4">
+            <p className="mb-4">Please log in to write a review.</p>
+            <button onClick={onClose} className="rounded-btn bg-primary-800 text-white fw-semibold">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('reviews')
         .insert({
-          source_id, // associating the review with the specific source
+          source_id,
           overall_rating: ratings.overall,
           product_effectiveness: ratings.effectiveness,
           customer_service: ratings.customerService,
           shipping_and_delivery: ratings.shipping,
           price_to_performance: ratings.pricePerformance,
           comment: reviewText,
-          user_id: user?.id,  // Adding user_id here
+          user_id: user.id,
         });
 
       if (error) {
         console.error('Error saving review:', error);
+        alert('Failed to submit review. Please try again.');
       } else {
-        console.log('Review saved successfully:', data);
-        onClose(); // Close the modal on successful submission
+        onClose();
         setReviewText('');
         setRatings({
           overall: 0,
@@ -107,6 +127,7 @@ const ReviewModal: FC<ReviewModalProps> = ({ isOpen, onClose, source_id }) => {
       }
     } catch (err) {
       console.error('Submission error:', err);
+      alert('An error occurred while submitting your review.');
     } finally {
       setIsSubmitting(false);
     }
