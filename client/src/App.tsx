@@ -12,6 +12,9 @@ import { AuthProvider } from './AuthProvider';
 import Source from './components/Source/Source';
 import SourceReviewInside from './components/Source/SourceReviewInside';
 import SourceTalkInside from './components/Source/SourceTalkInside';
+import SteroidReviewInside from './components/Steroid/SteroidReviewInside';
+import SteroidTalkInside from './components/Steroid/SteroidTalkInside';
+import Steroid from './components/Steroid/Steroid';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +29,9 @@ const App: React.FC = () => {
         <Route path="/source" element={<Source />} />
         <Route path="/source/:source_name" element={<SourceReviewInside />} />
         <Route path="/sourcetalk/:source_name" element={<SourceTalkInside />} />
+        <Route path="/steroid" element={<Steroid />} />
+        <Route path="/steroid/:source_name" element={<SteroidReviewInside />} />
+        <Route path="/steroidtalk/:source_name" element={<SteroidTalkInside />} />
       </Routes>
     </Router>
     </AuthProvider>
