@@ -9,6 +9,7 @@ interface ReviewSectionProps {
 interface ReviewItemProps {
  reviewId: string;
  userName: string;
+ userAvatar?: string | null;
  karmaPoints: number;
  likeCount: number;
  dislikeCount: number;
@@ -80,7 +81,7 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
          review_id,
          comment,
          created_at,
-         profiles (username),
+         profiles (username, avatar_url),
          source_id,
          overall_rating,
          product_effectiveness,
@@ -124,7 +125,7 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
        review_id: string; 
        comment: string;
        created_at: string; 
-       profiles: { username: string }; 
+       profiles: { username: string; avatar_url: string | null }; 
        source_id: string;
        overall_rating: number;
        product_effectiveness: number;
@@ -139,6 +140,7 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
        return {
          reviewId: review.review_id,
          userName: review.profiles.username,
+         userAvatar: review.profiles.avatar_url,
          karmaPoints: likes - dislikes,
          likeCount: likes,
          dislikeCount: dislikes,
@@ -255,7 +257,8 @@ const Reviewcom: React.FC<ReviewSectionProps> = ({ setIsReviewModalOpen, sourceI
 
 const ReviewItem: React.FC<ReviewItemProps> = ({ 
  reviewId,
- userName, 
+ userName,
+ userAvatar,
  karmaPoints, 
  likeCount, 
  dislikeCount, 
@@ -321,7 +324,16 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
    <div className="review-item comment-item" id={reviewId}>
      <div className="comment-head mb-2">
        <div className="user-profile">
-         <img src="/images/aside-profile-pic.png" alt="" />
+         <img 
+           src={userAvatar || "/images/aside-profile-pic.png"} 
+           alt="" 
+           style={{ 
+             width: '30px',
+             height: '34px',
+             objectFit: 'cover',
+             borderRadius: '50%'
+           }}
+         />
          <h6 className="m-0 fw-bold">{userName}</h6>
          <span title="Comment Karma Point" className="comment-karma_point bg-bg10">
            <img src="/images/icon-karma.svg" alt="" />

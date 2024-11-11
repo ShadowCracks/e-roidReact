@@ -7,15 +7,15 @@ import supabase from '../../../utils/supabase';
 
 const ProfileDashboard = ({ profileOwnerId }: { profileOwnerId: string }) => {
   const [activeTab, setActiveTab] = useState('Overview');
-  const [isOwnProfile, setIsOwnProfile] = useState(false); // Only for the Settings tab
-  const [profileData, setProfileData] = useState<any>(null); // Stores profile data
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [profileData, setProfileData] = useState<any>(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      // Fetch profile details without checking user auth status
+      // Added avatar_url to the select query
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, dob, height, weight, fat, about, last_seen, role, created_at')
+        .select('username, dob, height, weight, fat, about, last_seen, role, created_at, avatar_url')
         .eq('id', profileOwnerId)
         .single();
 
@@ -26,21 +26,21 @@ const ProfileDashboard = ({ profileOwnerId }: { profileOwnerId: string }) => {
       }
     };
 
- const checkIfOwnProfile = async () => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (user) {
-    setIsOwnProfile(user.id === profileOwnerId); // User is logged in, check if it's their profile
-  } else {
-    setIsOwnProfile(false); // If no user is logged in, set isOwnProfile to false
-  }
-};
+    const checkIfOwnProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setIsOwnProfile(user.id === profileOwnerId);
+      } else {
+        setIsOwnProfile(false);
+      }
+    };
 
-    fetchProfileData();       // Fetch profile data regardless of authentication
-    checkIfOwnProfile();      // Check if the viewer is the profile owner
+    fetchProfileData();
+    checkIfOwnProfile();
   }, [profileOwnerId]);
 
   if (!profileData) {
-    return <div>Loading...</div>;  // This will only wait on profile data, not ownership status
+    return <div>Loading...</div>;
   }
 
   return (
@@ -71,7 +71,16 @@ const ProfileDashboard = ({ profileOwnerId }: { profileOwnerId: string }) => {
           <section className="profile-card bg-bg11">
             <span className="color-bg bg-black"></span>
             <div className="profile-card_header d-flex flex-column align-items-center gap-2">
-              <img src="/images/profile-pic.png" alt="Profile" />
+            <img 
+              src={profileData.avatar_url || "/images/profile-pic.png"} 
+              alt="Profile"
+              style={{ 
+                width: '100px',
+                height: '100px',
+                objectFit: 'cover',
+                borderRadius: '50%'
+              }}
+            />
               <span className="visibility-status online d-flex align-items-center gap-2">
                 <span className="dot"></span><span>Online</span>
               </span>
@@ -96,7 +105,6 @@ const ProfileDashboard = ({ profileOwnerId }: { profileOwnerId: string }) => {
             </div>
           </section>
 
-          {/* Conditionally render TabContents or ProfileSettings */}
           {activeTab === 'Overview' ? <TabContents /> : isOwnProfile && <ProfileSettings />}
           
         </div>

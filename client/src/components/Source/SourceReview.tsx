@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import supabase from '../../../utils/supabase';
-import { useNavigate } from 'react-router-dom'; // Updated to use useNavigate from React Router v6
+import { useNavigate } from 'react-router-dom';
 import '../style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,7 +11,7 @@ interface Source {
 
 const SourceReview: React.FC = () => {
   const [sources, setSources] = useState<Source[]>([]);
-  const navigate = useNavigate(); // Updated to use useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSources = async () => {
@@ -98,15 +98,18 @@ const SourceReview: React.FC = () => {
             )}
           </div>
 
-          <div className="list-pagination mt-3 d-flex gap-2 align-items-center justify-content-center">
-            <img className="cursor-pointer" src="/images/icon-chevron-left.svg" alt="" />
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center active">1</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">2</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">3</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">...</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">24</span>
-            <img className="cursor-pointer" src="images/icon-chevron-right.svg" alt="" />
-          </div>
+          {/* Pagination only shows if there are more than 10 sources */}
+          {sources.length > 10 && (
+            <div className="list-pagination mt-3 d-flex gap-2 align-items-center justify-content-center">
+              <img className="cursor-pointer" src="/images/icon-chevron-left.svg" alt="" />
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center active">1</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">2</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">3</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">...</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">24</span>
+              <img className="cursor-pointer" src="/images/icon-chevron-right.svg" alt="" />
+            </div>
+          )}
         </div>
       </div>
 

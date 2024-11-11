@@ -9,6 +9,7 @@ interface TalkSectionProps {
 interface TalkItemProps {
   talkId: string;
   userName: string;
+  userAvatar?: string | null;
   karmaPoints: number;
   likeCount: number;
   dislikeCount: number;
@@ -57,7 +58,7 @@ const talkcom: React.FC<TalkSectionProps> = ({ setIstalkModalOpen, sourceId }) =
           talk_id,
           comment,
           created_at,
-          profiles (username),
+          profiles (username, avatar_url),
           source_id
         `)
         .eq('source_id', sourceId)
@@ -94,8 +95,8 @@ const talkcom: React.FC<TalkSectionProps> = ({ setIstalkModalOpen, sourceId }) =
       const formattedTalks = (data as unknown as { 
         talk_id: string; 
         comment: string;
-        created_at: string;
-        profiles: { username: string }; 
+        created_at: string; 
+        profiles: { username: string; avatar_url: string | null }; 
         source_id: string;
       }[]).map(talk => {
         const talkReactions = reactionCounts?.filter(r => r.talk_id === talk.talk_id) || [];
@@ -105,6 +106,7 @@ const talkcom: React.FC<TalkSectionProps> = ({ setIstalkModalOpen, sourceId }) =
         return {
           talkId: talk.talk_id,
           userName: talk.profiles.username,
+          userAvatar: talk.profiles.avatar_url,
           karmaPoints: likes - dislikes,
           likeCount: likes,
           dislikeCount: dislikes,
@@ -216,7 +218,8 @@ const talkcom: React.FC<TalkSectionProps> = ({ setIstalkModalOpen, sourceId }) =
 
 const TalkItem: React.FC<TalkItemProps> = ({ 
   talkId,
-  userName, 
+  userName,
+  userAvatar,
   karmaPoints, 
   likeCount, 
   dislikeCount, 
@@ -273,7 +276,16 @@ const TalkItem: React.FC<TalkItemProps> = ({
     <div className="review-item comment-item" id={talkId}>
       <div className="comment-head mb-2">
         <div className="user-profile">
-          <img src="/images/aside-profile-pic.png" alt="" />
+          <img 
+            src={userAvatar || "/images/aside-profile-pic.png"} 
+            alt="" 
+            style={{ 
+              width: '30px',
+              height: '34px',
+              objectFit: 'cover',
+              borderRadius: '50%'
+            }}
+          />
           <h6 className="m-0 fw-bold">{userName}</h6>
           <span title="Comment Karma Point" className="comment-karma_point bg-bg10">
             <img src="/images/icon-karma.svg" alt="" />

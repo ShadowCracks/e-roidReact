@@ -144,6 +144,12 @@ const SourceTalkInside: React.FC = () => {
             </div>
 
             <aside className="d-flex flex-column gap-3">
+              <div className="aside-card bg-bg6 rounded-lg">
+                <div className="aside-card_subcard bg-bg7 rounded-lg px-5">
+                  <p className="fs-9 fw-bold p-0 m-0 line-h-sm">ONESICK</p>
+                  <span className="aside-tags bg-primary-800 rounded-xl fs-10 fw-bold">3,333</span>
+                </div>
+              </div>
               <RecentReviews />
               <NewSubmissions />    
             </aside>

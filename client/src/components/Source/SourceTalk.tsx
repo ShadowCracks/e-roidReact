@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import supabase from '../../../utils/supabase';
-import { useNavigate } from 'react-router-dom'; // Updated to use useNavigate from React Router v6
+import { useNavigate } from 'react-router-dom';
 import '../style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,7 +11,7 @@ interface Source {
 
 const SourceTalk: React.FC = () => {
   const [sources, setSources] = useState<Source[]>([]);
-  const navigate = useNavigate(); // Updated to use useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSources = async () => {
@@ -65,31 +65,22 @@ const SourceTalk: React.FC = () => {
                   <div className="list-item_content-wrapper d-flex align-items-center">
                     <div className="list-item_number d-flex align-items-center">
                       <div className="flex align-items-center justify-content-center">
-                        <span className="fs-9 fw-bold d-flex align-items-center justify-content-center bg-black text-white circle-tag rounded-xl text-center">
-                          {index + 1}
-                        </span>
+                      <p className="fw-bold text-uppercase m-0">{source.source_name}</p>
                       </div>
-                      <h2 className="fs-3 fw-bold m-0">{source.average_rating?.toFixed(2)}</h2>
+                      
                     </div>
                     <div className="list-item_content">
                       <div className="d-flex flex-wrap align-items-center justify-content-between">
-                        <p className="fw-bold text-uppercase m-0">{source.source_name}</p>
-                        <span className="m-0 fs-10">Average Rating</span>
+                        
+                        
                       </div>
                       <p className="fs-9-5 p-0">
                         This is a brief description or review of the source. Replace with actual review data if available.
                       </p>
                     </div>
                   </div>
-                  <div className="list-item_points d-flex gap-1 flex-wrap">
-                    {Array(10).fill(null).map((_, i) => (
-                      <span 
-                        key={i}
-                        className={`${i < Math.round(source.average_rating) ? 'bg-primary-800' : 'bg-bg4'} rounded-xl p-1 px-2 fs-9 fw-semibold`}
-                      >
-                        {(source.average_rating * 10).toFixed(2)}
-                      </span>
-                    ))}
+                  <div className="list-item_points d-flex gap-1 flex-wrap" style={{ minWidth: '300px' }}>
+                    {/* Empty but maintaining width */}
                   </div>
                 </div>
               ))
@@ -98,15 +89,18 @@ const SourceTalk: React.FC = () => {
             )}
           </div>
 
-          <div className="list-pagination mt-3 d-flex gap-2 align-items-center justify-content-center">
-            <img className="cursor-pointer" src="/images/icon-chevron-left.svg" alt="" />
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center active">1</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">2</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">3</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">...</span>
-            <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">24</span>
-            <img className="cursor-pointer" src="images/icon-chevron-right.svg" alt="" />
-          </div>
+          {/* Pagination only shows if there are more than 10 sources */}
+          {sources.length > 10 && (
+            <div className="list-pagination mt-3 d-flex gap-2 align-items-center justify-content-center">
+              <img className="cursor-pointer" src="/images/icon-chevron-left.svg" alt="" />
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center active">1</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">2</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">3</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">...</span>
+              <span className="cursor-pointer p-1 d-flex align-items-center justify-content-center">24</span>
+              <img className="cursor-pointer" src="images/icon-chevron-right.svg" alt="" />
+            </div>
+          )}
         </div>
       </div>
 
