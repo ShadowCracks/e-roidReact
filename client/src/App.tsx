@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import { AuthProvider } from './AuthProvider';
 import Source from './components/Source/Source';
 import SourceReviewInside from './components/Source/SourceReviewInside';
+import SourceTalkInside from './components/Source/SourceTalkInside';
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/profile/:username" element={<Username />} /> {/* Dynamic user profile route */}
         <Route path="/source" element={<Source />} />
         <Route path="/source/:source_name" element={<SourceReviewInside />} />
+        <Route path="/sourcetalk/:source_name" element={<SourceTalkInside />} />
       </Routes>
     </Router>
     </AuthProvider>

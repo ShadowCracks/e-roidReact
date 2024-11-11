@@ -42,9 +42,9 @@ const SourceReview: React.FC = () => {
           <div className="list-options d-flex gap-2 justify-content-end">
             <select className="cursor-pointer fs-8 fw-bold">
               <option selected disabled value="all">All Categories</option>
-              <option value="1">Category # 1</option>
-              <option value="2">Category # 2</option>
-              <option value="3">Category # 3</option>
+              <option value="1">New</option>
+              <option value="2">Rank</option>
+              <option value="3">Trending</option>
             </select>
             <select className="cursor-pointer fs-8 fw-bold">
               <option selected disabled value="world">Worldwide</option>

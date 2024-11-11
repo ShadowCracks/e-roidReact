@@ -8,17 +8,35 @@ import RecentReviews from './Sidebar/RecentReview';
 import NewSubmissions from './Sidebar/NewSubmissions';
 import Reviewcom from './Comments/Reviewcom';
 
+interface SourceReview {
+  source_id: string;
+  source_name: string;
+  overall: number;
+  quality: number;
+  delivery: number;
+  service: number;
+  pricing: number;
+}
+
 const SourceReviewInside: React.FC = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [sourcereview, setSource] = useState<{ source_id: string; source_name: string } | null>(null);
-  const { source_name } = useParams<{ source_name: string }>(); // Extract source_name from the URL
+  const [sourcereview, setSource] = useState<SourceReview | null>(null);
+  const { source_name } = useParams<{ source_name: string }>();
   
   useEffect(() => {
     const fetchSource = async () => {
       const { data, error } = await supabase
         .from('sourcereview')
-        .select('source_id, source_name')
-        .eq('source_name', source_name) // Use source_name for fetching
+        .select(`
+          source_id, 
+          source_name,
+          overall,
+          quality,
+          delivery,
+          service,
+          pricing
+        `)
+        .eq('source_name', source_name)
         .single();
 
       if (error) {
@@ -35,9 +53,9 @@ const SourceReviewInside: React.FC = () => {
   }, [source_name]);
 
   return (
-    <div className="main-container">
+    <div className="d-flex flex-wrap flex-lg-nowrap gap-3">
       <div id="header-container"></div>
-      <div className="bread-crumbs w-80 mx-auto mt-3">
+      <div>
         <a href="#" className="fs-7 fw-semibold underline">Home</a>
         <span>  </span>
         <span className="fs-7 fw-bolder text-primary-800">Steroid Source Reviews</span>
@@ -70,18 +88,28 @@ const SourceReviewInside: React.FC = () => {
                       </div>
                       <div className="item-detail_table-body">
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
-                          <span className="fs-10 fw-semibold text-uppercase">EFFECTIVENESS</span>
-                          <span className="fs-10 fw-semibold text-uppercase">100</span>
+                          <span className="fs-10 fw-semibold text-uppercase">OVERALL</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.overall || 0}%</span>
                           <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
-                          <span className="fs-10 fw-semibold text-uppercase">CREDIBILITY</span>
-                          <span className="fs-10 fw-semibold text-uppercase">1</span>
-                          <span className="fs-10 fw-semibold text-uppercase">99</span>
+                          <span className="fs-10 fw-semibold text-uppercase">QUALITY</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.quality || 0}%</span>
+                          <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                         <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
-                          <span className="fs-10 fw-semibold text-uppercase">SIDE EFFECTS / PIP</span>
-                          <span className="fs-10 fw-semibold text-uppercase">1</span>
+                          <span className="fs-10 fw-semibold text-uppercase">DELIVERY</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.delivery || 0}%</span>
+                          <span className="fs-10 fw-semibold text-uppercase">10</span>
+                        </div>
+                        <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
+                          <span className="fs-10 fw-semibold text-uppercase">SERVICE</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.service || 0}%</span>
+                          <span className="fs-10 fw-semibold text-uppercase">10</span>
+                        </div>
+                        <div className="item-detail_table-body_item d-flex align-items-center gap-2 justify-content-between">
+                          <span className="fs-10 fw-semibold text-uppercase">PRICING</span>
+                          <span className="fs-10 fw-semibold text-uppercase">{sourcereview?.pricing || 0}%</span>
                           <span className="fs-10 fw-semibold text-uppercase">10</span>
                         </div>
                       </div>
@@ -130,9 +158,9 @@ const SourceReviewInside: React.FC = () => {
             </section>
 
             <Reviewcom 
-  setIsReviewModalOpen={setIsReviewModalOpen} 
-  sourceId={sourcereview?.source_id || ''}
-/>
+              setIsReviewModalOpen={setIsReviewModalOpen} 
+              sourceId={sourcereview?.source_id || ''}
+            />
           </div>
 
           <aside className="d-flex flex-column gap-3">
@@ -152,9 +180,8 @@ const SourceReviewInside: React.FC = () => {
       <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
-        source_id={sourcereview?.source_id || ''} // Fallback to empty string if undefined
+        source_id={sourcereview?.source_id || ''}
       />
-
     </div>
   );
 };
