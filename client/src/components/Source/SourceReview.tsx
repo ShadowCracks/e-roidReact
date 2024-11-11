@@ -82,14 +82,19 @@ const SourceReview: React.FC = () => {
                     </div>
                   </div>
                   <div className="list-item_points d-flex gap-1 flex-wrap">
-                    {Array(10).fill(null).map((_, i) => (
-                      <span 
-                        key={i}
-                        className={`${i < Math.round(source.average_rating) ? 'bg-primary-800' : 'bg-bg4'} rounded-xl p-1 px-2 fs-9 fw-semibold`}
-                      >
-                        {(source.average_rating * 10).toFixed(2)}
-                      </span>
-                    ))}
+                    {Array(10).fill(null).map((_, i) => {
+                      const displayRating = (source.average_rating + (i - 4) * 0.1).toFixed(2); // Surrounding ratings
+                      return (
+                        <span 
+                          key={i}
+                          className={`${
+                            i === 4 ? 'bg-yellow' : 'bg-bg4' // Yellow for the exact average rating position
+                          } rounded-xl p-1 px-2 fs-9 fw-semibold`}
+                        >
+                          {displayRating}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               ))
