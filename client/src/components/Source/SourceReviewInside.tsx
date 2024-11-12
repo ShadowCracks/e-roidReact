@@ -28,6 +28,23 @@ interface SourceReview {
   profiles: Profile | null;
 }
 
+interface SupabaseSourceResponse {
+  source_id: string;
+  source_name: string;
+  overall: number;
+  quality: number;
+  delivery: number;
+  service: number;
+  pricing: number;
+  review_count: number;
+  average_rating: number;
+  user_id: string;
+  profiles: {
+    username: string;
+    avatar_url: string | null;
+  }[];
+}
+
 const SourceReviewInside: React.FC = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [sourcereview, setSource] = useState<SourceReview | null>(null);
@@ -35,13 +52,11 @@ const SourceReviewInside: React.FC = () => {
   
   useEffect(() => {
     const fetchSource = async () => {
-      // First get all sources ordered by average_rating to calculate rank
       const { data: allSources } = await supabase
         .from('sourcereview')
         .select('source_id, average_rating')
         .order('average_rating', { ascending: false });
 
-      // Then get the specific source details with user profile info
       const { data, error } = await supabase
         .from('sourcereview')
         .select(`
@@ -55,7 +70,7 @@ const SourceReviewInside: React.FC = () => {
           review_count,
           average_rating,
           user_id,
-          profiles!sourcereview_user_id_fkey (
+          profiles (
             username,
             avatar_url
           )
@@ -66,23 +81,29 @@ const SourceReviewInside: React.FC = () => {
       if (error) {
         console.error("Error fetching source:", error);
       } else if (data && allSources) {
-        // Calculate rank
         const rank = allSources.findIndex(s => s.source_id === data.source_id) + 1;
+        
+        // Type assertion and data transformation
+        const sourceData = data as unknown as SupabaseSourceResponse;
 
-        // Properly type and transform the data
         const transformedData: SourceReview = {
-          source_id: data.source_id,
-          source_name: data.source_name,
-          overall: data.overall,
-          quality: data.quality,
-          delivery: data.delivery,
-          service: data.service,
-          pricing: data.pricing,
-          review_count: data.review_count,
-          average_rating: data.average_rating,
-          user_id: data.user_id,
+          source_id: sourceData.source_id,
+          source_name: sourceData.source_name,
+          overall: sourceData.overall,
+          quality: sourceData.quality,
+          delivery: sourceData.delivery,
+          service: sourceData.service,
+          pricing: sourceData.pricing,
+          review_count: sourceData.review_count,
+          average_rating: sourceData.average_rating,
+          user_id: sourceData.user_id,
           rank,
-          profiles: data.profiles || null
+          profiles: sourceData.profiles && sourceData.profiles.length > 0
+            ? {
+                username: sourceData.profiles[0].username,
+                avatar_url: sourceData.profiles[0].avatar_url
+              }
+            : null
         };
         
         setSource(transformedData);
