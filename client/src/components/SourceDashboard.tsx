@@ -137,7 +137,7 @@ const SourceDashboard: React.FC = () => {
               style={{ cursor: 'pointer' }}
             >
               <img src={product.imgSrc} alt="" />
-              <span className="product-item_rating">#{product.rating}</span>
+              <span className="product-item_rating">{product.rating}</span>
               <span className="product-item_site">{product.site}</span>
               <span className="product-item_score">
                 <span>Score</span>

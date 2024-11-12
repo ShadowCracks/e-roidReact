@@ -8,6 +8,11 @@ import RecentReviews from './Sidebar/RecentReview';
 import NewSubmissions from './Sidebar/NewSubmissions';
 import Reviewcom from './Comments/Reviewcom';
 
+interface Profile {
+  username: string;
+  avatar_url: string | null;
+}
+
 interface SourceReview {
   source_id: string;
   source_name: string;
@@ -19,6 +24,8 @@ interface SourceReview {
   review_count: number;
   average_rating: number;
   rank?: number;
+  user_id?: string;
+  profiles: Profile | null;
 }
 
 const SourceReviewInside: React.FC = () => {
@@ -34,7 +41,7 @@ const SourceReviewInside: React.FC = () => {
         .select('source_id, average_rating')
         .order('average_rating', { ascending: false });
 
-      // Then get the specific source details
+      // Then get the specific source details with user profile info
       const { data, error } = await supabase
         .from('sourcereview')
         .select(`
@@ -46,7 +53,12 @@ const SourceReviewInside: React.FC = () => {
           service,
           pricing,
           review_count,
-          average_rating
+          average_rating,
+          user_id,
+          profiles!sourcereview_user_id_fkey (
+            username,
+            avatar_url
+          )
         `)
         .eq('source_name', source_name)
         .single();
@@ -56,10 +68,24 @@ const SourceReviewInside: React.FC = () => {
       } else if (data && allSources) {
         // Calculate rank
         const rank = allSources.findIndex(s => s.source_id === data.source_id) + 1;
-        const sourceWithRank = { ...data, rank };
+
+        // Properly type and transform the data
+        const transformedData: SourceReview = {
+          source_id: data.source_id,
+          source_name: data.source_name,
+          overall: data.overall,
+          quality: data.quality,
+          delivery: data.delivery,
+          service: data.service,
+          pricing: data.pricing,
+          review_count: data.review_count,
+          average_rating: data.average_rating,
+          user_id: data.user_id,
+          rank,
+          profiles: data.profiles || null
+        };
         
-        console.log("Fetched source data:", sourceWithRank);
-        setSource(sourceWithRank);
+        setSource(transformedData);
       }
     };
 
@@ -176,8 +202,33 @@ const SourceReviewInside: React.FC = () => {
           <aside className="d-flex flex-column gap-3">
             <div className="aside-card bg-bg6 rounded-lg">
               <div className="aside-card_subcard bg-bg7 rounded-lg px-5">
-                <p className="fs-9 fw-bold p-0 m-0 line-h-sm">ONESICK</p>
-                <span className="aside-tags bg-primary-800 rounded-xl fs-10 fw-bold">3,333</span>
+                {sourcereview?.profiles ? (
+                  <>
+                    {sourcereview.profiles.avatar_url ? (
+                      <img 
+                        src={sourcereview.profiles.avatar_url} 
+                        alt="Profile" 
+                        className="rounded-circle mb-2"
+                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <div 
+                        className="rounded-circle bg-primary-800 mb-2 d-flex align-items-center justify-content-center text-white"
+                        style={{ width: '50px', height: '50px' }}
+                      >
+                        {sourcereview.profiles.username.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <p className="fs-9 fw-bold p-0 m-0 line-h-sm">
+                      {sourcereview.profiles.username}
+                    </p>
+                  </>
+                ) : (
+                  <p className="fs-9 fw-bold p-0 m-0 line-h-sm">ONESICK</p>
+                )}
+                <span className="aside-tags bg-primary-800 rounded-xl fs-10 fw-bold">
+                  {sourcereview?.review_count || 0}
+                </span>
               </div>
             </div>
 
